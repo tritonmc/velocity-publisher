@@ -7,6 +7,7 @@ fi
 
 cd Velocity
 git restore .
+git pull
 git clean -fd
 
 for patch in ../patches/*.patch; do

@@ -1,110 +1,30 @@
-diff --git a/api/build.gradle b/api/build.gradle
-index 028bfe3c..a31c9e42 100644
---- a/api/build.gradle
-+++ b/api/build.gradle
-@@ -1,12 +1,10 @@
- plugins {
-     id 'java-library'
--    id 'maven-publish'
-     id 'checkstyle'
- }
+diff --git a/buildSrc/src/main/kotlin/com/velocitypowered/script/VelocityPublishPlugin.kt b/buildSrc/src/main/kotlin/com/velocitypowered/script/VelocityPublishPlugin.kt
+index 8aa18b04..29c41ad0 100644
+--- a/buildSrc/src/main/kotlin/com/velocitypowered/script/VelocityPublishPlugin.kt
++++ b/buildSrc/src/main/kotlin/com/velocitypowered/script/VelocityPublishPlugin.kt
+@@ -33,9 +33,7 @@ import org.gradle.kotlin.dsl.getByType
  
- apply plugin: 'org.cadixdev.licenser'
- apply from: '../gradle/checkstyle.gradle'
--apply from: '../gradle/publish.gradle'
- apply plugin: 'com.github.johnrengelman.shadow'
- 
- java {
-@@ -106,14 +104,3 @@ javadoc {
- test {
-     useJUnitPlatform()
- }
--
--publishing {
--    publications {
--        mavenJava(MavenPublication) {
--            from components.java
--
--            artifact sourcesJar
--            artifact javadocJar
+ class VelocityPublishPlugin : Plugin<Project> {
+     override fun apply(target: Project) = target.afterEvaluate {
+-        if (target.name != "velocity-proxy") {
+-            configure()
 -        }
--    }
--}
-diff --git a/gradle/publish-dtc.gradle b/gradle/publish-dtc.gradle
-new file mode 100644
-index 00000000..12cec72a
---- /dev/null
-+++ b/gradle/publish-dtc.gradle
-@@ -0,0 +1,13 @@
-+publishing {
-+    repositories {
-+        maven {
-+            credentials(PasswordCredentials.class)
-+            authentication {
-+                basic(BasicAuthentication)
-+            }
-+
-+            name = 'diogotcRepository'
-+            url = 'https://repo.diogotc.com/snapshots/'
-+        }
-+    }
-+}
-diff --git a/native/build.gradle b/native/build.gradle
-index b5854745..ea30a7cf 100644
---- a/native/build.gradle
-+++ b/native/build.gradle
-@@ -1,12 +1,10 @@
- plugins {
-     id 'java-library'
-     id 'checkstyle'
--    id 'maven-publish'
- }
++        configure()
+     }
+     private fun Project.configure() {
+         apply<JavaBasePlugin>()
+@@ -45,10 +43,10 @@ class VelocityPublishPlugin : Plugin<Project> {
+                 maven {
+                     credentials(PasswordCredentials::class.java)
  
- apply plugin: 'org.cadixdev.licenser'
- apply from: '../gradle/checkstyle.gradle'
--apply from: '../gradle/publish.gradle'
- 
- java {
-     sourceCompatibility = JavaVersion.VERSION_11
-@@ -30,10 +28,3 @@ test {
-     useJUnitPlatform()
- }
- 
--publishing {
--    publications {
--        mavenJava(MavenPublication) {
--            from components.java
--        }
--    }
--}
-\ No newline at end of file
-diff --git a/proxy/build.gradle b/proxy/build.gradle
-index 24e4db58..7cf9f543 100644
---- a/proxy/build.gradle
-+++ b/proxy/build.gradle
-@@ -2,11 +2,13 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCach
- 
- plugins {
-     id 'java'
-+    id 'maven-publish'
-     id 'checkstyle'
- }
- 
- apply plugin: 'org.cadixdev.licenser'
- apply from: '../gradle/checkstyle.gradle'
-+apply from: '../gradle/publish-dtc.gradle'
- apply plugin: 'com.github.johnrengelman.shadow'
- 
- license {
-@@ -160,3 +162,11 @@ shadowJar {
- artifacts {
-     archives shadowJar
- }
-+
-+publishing {
-+    publications {
-+        mavenJava(MavenPublication) {
-+            from components.java
-+        }
-+    }
-+}
+-                    name = "paper"
+-                    val base = "https://papermc.io/repo/repository/maven"
+-                    val releasesRepoUrl = "$base-releases/"
+-                    val snapshotsRepoUrl = "$base-snapshots/"
++                    name = "diogotcRepository"
++                    val base = "https://repo.diogotc.com"
++                    val releasesRepoUrl = "$base/releases/"
++                    val snapshotsRepoUrl = "$base/snapshots/"
+                     setUrl(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+                 }
+             }
