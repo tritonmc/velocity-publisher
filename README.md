@@ -11,7 +11,7 @@ sources of [Velocity](https://github.com/PaperMC/Velocity) to my
 [Triton](https://github.com/tritonmc/Triton) requires access to internal
 classes (mainly in the `proxy` package) that are not available in Velocity's
 public API.  
-Since Velocity does not provide a repository with access tho their internal API,
+Since Velocity does not provide a repository with access to their internal API,
 I had to create my own.
 
 ## How?
