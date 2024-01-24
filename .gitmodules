@@ -2,3 +2,4 @@
 	path = Velocity
 	url = https://github.com/PaperMC/Velocity.git
 	shallow = true
+	ignore = all
