@@ -1,17 +1,14 @@
 #! /usr/bin/env bash
-
-if [ ! -d "Velocity" ];
-then
-        git clone https://github.com/PaperMC/Velocity.git
-fi
+set -e
 
 cd Velocity
-git restore .
-git pull
-git clean -fd
 
 for patch in ../patches/*.patch; do
-        git apply $patch || exit
+    git apply $patch
 done
 
 ./gradlew publish
+
+ls ../patches/*.patch | tac | while read f; do
+    git apply -R $patch
+done
